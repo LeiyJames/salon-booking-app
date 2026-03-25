@@ -36,25 +36,56 @@
           </div>
         </div>
       </div>
-      <div class="card p-5">
-        <h2 class="font-semibold text-dark-100 text-lg mb-4 flex items-center gap-2"><CreditCard :size="18" class="text-gold-400" /> Payment Settings</h2>
-        <div class="space-y-3">
-          <div><label class="block text-sm font-medium text-dark-300 mb-1.5">Default Payment Mode</label>
-            <select v-model="settings.paymentMode" class="input-field"><option value="in_person">Pay In Person (default)</option><option value="online">Online Payment</option><option value="both">Both Options</option></select></div>
-          <div v-if="settings.paymentMode !== 'in_person'" class="bg-dark-700/50 rounded-xl p-4 text-sm text-dark-400">
-            <p class="flex items-center gap-2 text-amber-400"><AlertTriangle :size="14" /> Online payment integration requires backend setup. This is a placeholder for MVP.</p></div>
+      <div class="card p-5 border-red-500/10">
+        <h2 class="font-semibold text-red-400 text-lg mb-4 flex items-center gap-2">Danger Zone</h2>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex-1">
+              <p class="text-dark-200 font-medium text-sm">Clear All Local Data</p>
+              <p class="text-xs text-dark-400">Permanently delete all appointments and customers from your local storage.</p>
+            </div>
+            <button class="btn-danger whitespace-nowrap px-4 py-2 text-xs" @click="clearAllData">
+              <Trash2 :size="14" /> Clear All
+            </button>
+          </div>
         </div>
       </div>
+
       <button class="btn-primary w-full" @click="saveSettings">Save Settings</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { store } from '../../store'
-import { Shield, Bell, CreditCard, AlertTriangle } from 'lucide-vue-next'
+import { Shield, Bell, CreditCard, AlertTriangle, Trash2 } from 'lucide-vue-next'
 
-const settings = reactive({ cancelWindow: '24', maxAdvanceDays: 30, guestBooking: true, confirmNotification: true, reminder24h: true, reminder2h: true, paymentMode: 'in_person' })
-function saveSettings () { localStorage.setItem('glowup_settings', JSON.stringify(settings)); store.showToast('Settings saved!', 'success') }
+const settings = reactive({
+  cancelWindow: '24',
+  maxAdvanceDays: 30,
+  guestBooking: true,
+  confirmNotification: true,
+  reminder24h: true,
+  reminder2h: true,
+  paymentMode: 'in_person'
+})
+
+onMounted(() => {
+  const saved = localStorage.getItem('glowup_settings')
+  if (saved) Object.assign(settings, JSON.parse(saved))
+})
+
+function saveSettings () {
+  localStorage.setItem('glowup_settings', JSON.stringify(settings))
+  store.showToast('Settings saved!', 'success')
+}
+
+function clearAllData () {
+  if (confirm('Are you SURE? This will delete all appointments and customers!')) {
+    localStorage.removeItem('glowup_appointments')
+    localStorage.removeItem('glowup_customers')
+    window.location.reload()
+  }
+}
 </script>

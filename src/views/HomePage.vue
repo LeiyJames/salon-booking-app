@@ -92,27 +92,19 @@
     </section>
 
     <!-- Quick Actions -->
-    <section class="px-5 mt-8 max-w-xl mx-auto mb-8">
-      <div class="grid grid-cols-2 gap-3">
-        <router-link to="/manage" class="card p-4 flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl bg-accent-500/10 flex items-center justify-center">
-            <Search :size="18" class="text-accent-400" />
+    <section class="px-5 mt-8 max-w-xl mx-auto mb-8 animate-fade-in-up delay-600">
+      <router-link to="/manage" class="card p-5 flex items-center justify-between group hover:border-accent-500/30">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-accent-500/10 flex items-center justify-center">
+            <Search :size="20" class="text-accent-400" />
           </div>
           <div>
-            <h3 class="font-medium text-dark-100 text-sm">Manage Booking</h3>
-            <p class="text-dark-400 text-xs">View or change</p>
+            <h3 class="font-semibold text-dark-100 italic md:not-italic">Manage your existing booking</h3>
+            <p class="text-dark-400 text-sm">View, reschedule, or cancel your appointment</p>
           </div>
-        </router-link>
-        <router-link to="/admin" class="card p-4 flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl bg-dark-600 flex items-center justify-center">
-            <LayoutDashboard :size="18" class="text-dark-300" />
-          </div>
-          <div>
-            <h3 class="font-medium text-dark-100 text-sm">Staff Portal</h3>
-            <p class="text-dark-400 text-xs">Admin access</p>
-          </div>
-        </router-link>
-      </div>
+        </div>
+        <ChevronRight :size="20" class="text-dark-500 group-hover:text-accent-400 transition-all" />
+      </router-link>
     </section>
   </div>
 </template>

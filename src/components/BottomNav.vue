@@ -17,15 +17,14 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
-import { Scissors, CalendarDays, Search, MoreHorizontal } from 'lucide-vue-next'
+import { Home, Scissors, CalendarDays, Search } from 'lucide-vue-next'
 
 const route = useRoute()
 
 const navItems = [
+  { label: 'Home', path: '/', icon: Home },
   { label: 'Book', path: '/book', icon: Scissors },
-  { label: 'Calendar', path: '/manage', icon: CalendarDays },
-  { label: 'Explore', path: '/', icon: Search },
-  { label: 'Admin', path: '/admin', icon: MoreHorizontal },
+  { label: 'My Bookings', path: '/manage', icon: CalendarDays },
 ]
 
 function isActive (path) {

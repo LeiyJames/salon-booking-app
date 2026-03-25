@@ -17,13 +17,15 @@
         <template v-for="(label, idx) in stepLabels" :key="idx">
           <div class="flex flex-col items-center gap-1 flex-shrink-0">
             <div
-              class="stepper-dot"
+              class="stepper-dot flex items-center justify-center"
               :class="{
-                'stepper-dot-completed': idx < step,
-                'stepper-dot-active': idx === step,
-                'stepper-dot-pending': idx > step,
+                'stepper-dot-completed bg-gold-500': idx < step,
+                'stepper-dot-active border-gold-500 bg-dark-800': idx === step,
+                'stepper-dot-pending border-dark-600 bg-dark-900': idx > step,
               }"
-            ></div>
+            >
+              <Check v-if="idx < step" :size="12" class="text-dark-900 stroke-[3px]" />
+            </div>
             <span class="text-[10px] font-medium" :class="idx <= step ? 'text-gold-400' : 'text-dark-500'">{{ label }}</span>
           </div>
           <div v-if="idx < stepLabels.length - 1" class="stepper-line" :class="idx < step ? 'bg-gold-500' : 'bg-dark-600'"></div>
@@ -169,15 +171,32 @@
             <CalendarX :size="32" class="text-dark-500 mx-auto mb-2" />
             <p class="text-dark-400 text-sm">No available slots for this date.</p>
           </div>
-          <div v-else class="grid grid-cols-3 gap-2">
+          <div v-else class="grid grid-cols-2 md:grid-cols-3 gap-3">
             <div
               v-for="slot in timeSlots"
               :key="slot.time"
-              class="time-slot"
-              :class="{ 'time-slot-selected': selectedTime === slot.time }"
-              @click="selectedTime = slot.time; selectedEndTime = slot.endTime"
+              class="time-slot relative flex flex-col items-center justify-center py-4 px-2 h-20 transition-all border-2"
+              :class="{
+                'time-slot-selected border-gold-500 bg-gold-500/20 shadow-[0_0_15px_rgba(201,164,86,0.2)]': selectedTime === slot.time,
+                'border-transparent bg-dark-700 hover:bg-dark-600': slot.status === 'available' && selectedTime !== slot.time,
+                'border-green-500/30 bg-green-500/5 opacity-80 cursor-not-allowed': slot.status === 'booked',
+                'border-amber-500/30 bg-amber-500/5 opacity-80 cursor-not-allowed': slot.status === 'pending'
+              }"
+              @click="slot.status === 'available' && (selectedTime = slot.time, selectedEndTime = slot.endTime)"
             >
-              {{ formatTime(slot.time) }}
+              <span class="text-sm font-bold" :class="selectedTime === slot.time ? 'text-white' : 'text-dark-100'">
+                {{ formatTime(slot.time) }}
+              </span>
+
+              <div v-if="slot.status === 'booked'" class="mt-1 flex items-center gap-1 text-[10px] font-bold text-green-400 uppercase tracking-tighter">
+                <CheckCircle2 :size="10" /> Taken
+              </div>
+              <div v-else-if="slot.status === 'pending'" class="mt-1 flex items-center gap-1 text-[10px] font-bold text-amber-400 uppercase tracking-tighter">
+                <Clock :size="10" /> Pending
+              </div>
+              <div v-else class="mt-1 text-[10px] text-dark-400 uppercase tracking-tighter">
+                Available
+              </div>
             </div>
           </div>
         </div>
@@ -310,7 +329,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { store, formatPrice, formatTime, formatDate, formatDateLong, getServiceCategories, getStylistInitials } from '../store'
 import {
   ArrowLeft, Clock, Check, Shuffle, ChevronLeft, ChevronRight,
-  MapPin, Sparkles, UserCheck, User, CalendarDays, CalendarX
+  MapPin, Sparkles, UserCheck, User, CalendarDays, CalendarX, CheckCircle2
 } from 'lucide-vue-next'
 
 const router = useRouter()

@@ -102,60 +102,11 @@ const stylists = [
 ]
 
 // ─── Customers ───
-const defaultCustomers = [
-  { id: 'cust-1', name: 'John Doe', email: 'john@example.com', phone: '(555) 111-0001', notes: 'Prefers short fade' },
-  { id: 'cust-2', name: 'Maria Garcia', email: 'maria@example.com', phone: '(555) 111-0002', notes: '' },
-  { id: 'cust-3', name: 'David Chen', email: 'david@example.com', phone: '(555) 111-0003', notes: 'Allergic to certain products' },
-]
+const defaultCustomers = []
 
 // ─── Appointments ───
 function generateSampleAppointments () {
-  const d = new Date()
-  const todayStr = today()
-  const tomorrowStr = new Date(d.getTime() + 86400000).toISOString().slice(0, 10)
-  const dayAfterStr = new Date(d.getTime() + 2 * 86400000).toISOString().slice(0, 10)
-
-  return [
-    {
-      id: 'apt-1', customerId: 'cust-1', customerName: 'John Doe',
-      locationId: 'loc-1', stylistId: 'stf-1', stylistName: 'Marco Rivera',
-      services: [{ serviceId: 'svc-2', name: 'Fade & Taper', duration: 45, price: 450 }],
-      date: todayStr, time: '10:00', endTime: '10:45',
-      totalDuration: 45, totalPrice: 450,
-      status: 'confirmed', paymentStatus: 'unpaid',
-      createdAt: new Date().toISOString(), notes: '',
-    },
-    {
-      id: 'apt-2', customerId: 'cust-2', customerName: 'Maria Garcia',
-      locationId: 'loc-1', stylistId: 'stf-2', stylistName: 'Aisha Santos',
-      services: [
-        { serviceId: 'svc-5', name: 'Hair Color', duration: 90, price: 1200 },
-        { serviceId: 'svc-10', name: 'Shampoo & Blowdry', duration: 30, price: 300 },
-      ],
-      date: todayStr, time: '14:00', endTime: '16:00',
-      totalDuration: 120, totalPrice: 1500,
-      status: 'confirmed', paymentStatus: 'unpaid',
-      createdAt: new Date().toISOString(), notes: 'First time color',
-    },
-    {
-      id: 'apt-3', customerId: 'cust-3', customerName: 'David Chen',
-      locationId: 'loc-2', stylistId: 'stf-3', stylistName: 'Jake Torres',
-      services: [{ serviceId: 'svc-1', name: 'Classic Haircut', duration: 30, price: 350 }],
-      date: tomorrowStr, time: '11:00', endTime: '11:30',
-      totalDuration: 30, totalPrice: 350,
-      status: 'confirmed', paymentStatus: 'unpaid',
-      createdAt: new Date().toISOString(), notes: '',
-    },
-    {
-      id: 'apt-4', customerId: 'cust-1', customerName: 'John Doe',
-      locationId: 'loc-1', stylistId: 'stf-1', stylistName: 'Marco Rivera',
-      services: [{ serviceId: 'svc-3', name: 'Beard Trim & Shape', duration: 20, price: 200 }],
-      date: dayAfterStr, time: '09:00', endTime: '09:20',
-      totalDuration: 20, totalPrice: 200,
-      status: 'pending', paymentStatus: 'unpaid',
-      createdAt: new Date().toISOString(), notes: '',
-    },
-  ]
+  return []
 }
 
 // ─── Persist helpers ───
@@ -182,7 +133,7 @@ export const store = reactive({
 
   // UI state
   currentLocationId: 'loc-1',
-  currentUser: { id: 'admin-1', name: 'Admin', role: 'super_admin' },
+  currentUser: loadFromStorage('glowup_auth', null),
   toasts: [],
 
   // ─── Getters ───
@@ -287,19 +238,26 @@ export const store = reactive({
     )
 
     const slots = []
-    for (let m = startMinutes; m + totalDuration <= endMinutes; m += 15) {
+    for (let m = startMinutes; m + totalDuration <= endMinutes; m += 30) { // Set to 30 min intervals for better UI readability
       const slotStart = minutesToTime(m)
       const slotEnd = minutesToTime(m + totalDuration)
 
-      const conflict = booked.some(a => {
+      const conflictingAppt = booked.find(a => {
         const aStart = timeToMinutes(a.time)
         const aEnd = timeToMinutes(a.endTime)
         return m < aEnd && m + totalDuration > aStart
       })
 
-      if (!conflict) {
-        slots.push({ time: slotStart, endTime: slotEnd })
+      let status = 'available'
+      if (conflictingAppt) {
+        if (conflictingAppt.status === 'confirmed' && conflictingAppt.paymentStatus === 'paid') {
+          status = 'booked'
+        } else {
+          status = 'pending' // Someone is booking/waiting for payment
+        }
       }
+
+      slots.push({ time: slotStart, endTime: slotEnd, status })
     }
 
     return slots
@@ -313,6 +271,32 @@ export const store = reactive({
       const idx = this.toasts.findIndex(t => t.id === id)
       if (idx > -1) this.toasts.splice(idx, 1)
     }, 3500)
+  },
+
+  // ─── Auth ───
+  login (role) {
+    const user = role === 'admin'
+      ? { id: 'admin-1', name: 'Admin', role: 'super_admin' }
+      : { id: 'user-1', name: 'Customer', role: 'customer' }
+    this.currentUser = user
+    saveToStorage('glowup_auth', user)
+  },
+
+  logout () {
+    this.currentUser = null
+    localStorage.removeItem('glowup_auth')
+  },
+
+  get isLoggedIn () {
+    return !!this.currentUser
+  },
+
+  get isAdmin () {
+    return this.currentUser?.role === 'super_admin'
+  },
+
+  get isCustomer () {
+    return this.currentUser?.role === 'customer'
   },
 
   _persist () {

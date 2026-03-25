@@ -1,7 +1,18 @@
 <template>
-  <div class="min-h-screen pb-24 px-5">
-    <div class="max-w-xl mx-auto pt-8">
-      <h1 class="font-display text-2xl font-bold text-dark-100 mb-2">Manage Booking</h1>
+  <div class="min-h-screen pb-24">
+    <!-- Header -->
+    <div class="glass sticky top-0 z-20 px-5 py-3">
+      <div class="max-w-xl mx-auto flex items-center justify-between">
+        <button @click="router.back()" class="p-2 -ml-2 rounded-lg hover:bg-dark-700 text-dark-300">
+          <ArrowLeft :size="20" />
+        </button>
+        <h1 class="font-semibold text-dark-100">Manage Booking</h1>
+        <div class="w-9"></div> <!-- Spacer to balance the title -->
+      </div>
+    </div>
+
+    <div class="max-w-xl mx-auto pt-6 px-5 text-center">
+      <h2 class="font-display text-2xl font-bold text-dark-100 mb-2">Your Appointments</h2>
       <p class="text-dark-400 text-sm mb-6">Look up your appointment to view, cancel, or reschedule.</p>
 
       <div class="relative mb-6">
@@ -69,8 +80,11 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { store, formatDate, formatTime, formatPrice } from '../store'
-import { Search, CalendarDays, Clock, XCircle, RefreshCw, CalendarX, X } from 'lucide-vue-next'
+import { ArrowLeft, Search, CalendarDays, Clock, XCircle, RefreshCw, CalendarX, X } from 'lucide-vue-next'
+
+const router = useRouter()
 
 const searchQuery = ref('')
 const rescheduleApt = ref(null)
