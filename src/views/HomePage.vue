@@ -2,13 +2,11 @@
   <div class="min-h-screen pb-24">
     <!-- Hero Section -->
     <section class="relative overflow-hidden">
-      <!-- Background gradient -->
       <div class="absolute inset-0 bg-gradient-to-br from-dark-800 via-dark-900 to-dark-900"></div>
       <div class="absolute top-0 right-0 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
       <div class="absolute bottom-0 left-0 w-72 h-72 bg-accent-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3"></div>
 
       <div class="relative px-5 pt-14 pb-12 max-w-xl mx-auto text-center">
-        <!-- Logo -->
         <div class="inline-flex items-center gap-2 mb-6 animate-fade-in-up">
           <div class="w-12 h-12 rounded-2xl gradient-gold flex items-center justify-center shadow-lg animate-pulse-glow">
             <Scissors :size="24" class="text-dark-900" />
@@ -23,10 +21,7 @@
           Premium grooming & styling, tailored to you.
         </p>
 
-        <router-link
-          to="/book"
-          class="btn-primary text-base px-8 py-3.5 animate-fade-in-up delay-300 inline-flex"
-        >
+        <router-link to="/book" class="btn-primary text-base px-8 py-3.5 animate-fade-in-up delay-300 inline-flex">
           <CalendarPlus :size="20" />
           Book Appointment
         </router-link>

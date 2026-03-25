@@ -1,6 +1,5 @@
 <template>
   <header class="sticky top-0 z-30 glass px-4 py-3 md:px-6 flex items-center justify-between">
-    <!-- Mobile menu button -->
     <button class="md:hidden p-2 rounded-lg hover:bg-dark-700 text-dark-300" @click="mobileMenuOpen = !mobileMenuOpen">
       <Menu :size="22" />
     </button>
@@ -16,7 +15,6 @@
       </button>
     </div>
 
-    <!-- Mobile sidebar overlay -->
     <teleport to="body">
       <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-50">
         <div class="overlay-backdrop" @click="mobileMenuOpen = false"></div>

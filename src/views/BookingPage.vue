@@ -37,7 +37,6 @@
         <h2 class="text-xl font-semibold text-dark-100 mb-1">Choose Services</h2>
         <p class="text-dark-400 text-sm mb-5">Select one or more services</p>
 
-        <!-- Category Tabs -->
         <div class="flex gap-2 overflow-x-auto pb-3 scrollbar-hide mb-4">
           <button
             v-for="cat in categories"
@@ -50,7 +49,6 @@
           </button>
         </div>
 
-        <!-- Service Cards -->
         <div class="space-y-2">
           <div
             v-for="service in filteredServices"
@@ -83,7 +81,6 @@
         <h2 class="text-xl font-semibold text-dark-100 mb-1">Choose Stylist</h2>
         <p class="text-dark-400 text-sm mb-5">Pick your preferred stylist</p>
 
-        <!-- Any Available Option -->
         <div
           class="card p-4 mb-3 cursor-pointer transition-all"
           :class="selectedStylistId === 'any' ? 'border-gold-500/40 bg-gold-500/5' : ''"
@@ -100,7 +97,6 @@
           </div>
         </div>
 
-        <!-- Stylist Cards -->
         <div class="space-y-2">
           <div
             v-for="stylist in availableStylists"
@@ -136,7 +132,6 @@
         <h2 class="text-xl font-semibold text-dark-100 mb-1">Select Date & Time</h2>
         <p class="text-dark-400 text-sm mb-5">Choose your preferred slot</p>
 
-        <!-- Mini Calendar -->
         <div class="card p-4 mb-5">
           <div class="flex items-center justify-between mb-4">
             <button @click="prevMonth" class="p-2 rounded-lg hover:bg-dark-700 text-dark-400">
@@ -148,12 +143,10 @@
             </button>
           </div>
 
-          <!-- Day headers -->
           <div class="calendar-grid mb-2">
             <div v-for="d in dayHeaders" :key="d" class="text-center text-xs font-medium text-dark-400 py-1">{{ d }}</div>
           </div>
 
-          <!-- Day grid -->
           <div class="calendar-grid">
             <div v-for="(day, idx) in calendarDays" :key="idx"
               class="calendar-cell"
@@ -170,7 +163,6 @@
           </div>
         </div>
 
-        <!-- Time Slots -->
         <div v-if="selectedDate">
           <h3 class="font-medium text-dark-200 mb-3">Available Times</h3>
           <div v-if="timeSlots.length === 0" class="card p-6 text-center">
@@ -222,7 +214,6 @@
         <p class="text-dark-400 text-sm mb-5">Make sure everything looks good</p>
 
         <div class="card p-5 space-y-4">
-          <!-- Location -->
           <div class="flex items-start gap-3">
             <MapPin :size="18" class="text-gold-400 mt-0.5 flex-shrink-0" />
             <div>
@@ -231,7 +222,6 @@
             </div>
           </div>
 
-          <!-- Services -->
           <div class="flex items-start gap-3">
             <Sparkles :size="18" class="text-gold-400 mt-0.5 flex-shrink-0" />
             <div class="flex-1">
@@ -243,7 +233,6 @@
             </div>
           </div>
 
-          <!-- Stylist -->
           <div class="flex items-start gap-3">
             <UserCheck :size="18" class="text-gold-400 mt-0.5 flex-shrink-0" />
             <div>
@@ -252,7 +241,6 @@
             </div>
           </div>
 
-          <!-- Date & Time -->
           <div class="flex items-start gap-3">
             <CalendarDays :size="18" class="text-gold-400 mt-0.5 flex-shrink-0" />
             <div>
@@ -262,7 +250,6 @@
             </div>
           </div>
 
-          <!-- Customer -->
           <div class="flex items-start gap-3">
             <User :size="18" class="text-gold-400 mt-0.5 flex-shrink-0" />
             <div>
@@ -272,7 +259,6 @@
             </div>
           </div>
 
-          <!-- Divider -->
           <div class="border-t border-white/5 pt-3">
             <div class="flex justify-between items-center">
               <div>
@@ -292,19 +278,12 @@
     <!-- Sticky Action Bar -->
     <div class="fixed bottom-0 left-0 right-0 z-30 glass px-5 py-3 border-t border-white/5">
       <div class="max-w-xl mx-auto flex items-center gap-3">
-        <!-- Summary -->
         <div class="flex-1 min-w-0" v-if="step < 4">
-          <p class="text-xs text-dark-400">{{ selectedServices.length }} service(s)</p>
+          <p class="text-xs text-dark-400">{{ serviceCountLabel }}</p>
           <p class="text-sm font-semibold text-gold-400">{{ formatPrice(totalPrice) }} · {{ totalDuration }} min</p>
         </div>
 
-        <button
-          v-if="step > 0"
-          class="btn-secondary px-4"
-          @click="step--"
-        >
-          Back
-        </button>
+        <button v-if="step > 0" class="btn-secondary px-4" @click="step--">Back</button>
 
         <button
           v-if="step < 4"
@@ -316,11 +295,7 @@
           Continue
         </button>
 
-        <button
-          v-if="step === 4"
-          class="btn-primary px-8 flex-1"
-          @click="confirmBooking"
-        >
+        <button v-if="step === 4" class="btn-primary px-8 flex-1" @click="confirmBooking">
           <Check :size="18" />
           Confirm Booking
         </button>
@@ -335,14 +310,12 @@ import { useRouter, useRoute } from 'vue-router'
 import { store, formatPrice, formatTime, formatDate, formatDateLong, getServiceCategories, getStylistInitials } from '../store'
 import {
   ArrowLeft, Clock, Check, Shuffle, ChevronLeft, ChevronRight,
-  MapPin, Sparkles, UserCheck, CalendarDays as CalendarDaysIcon, User,
-  CalendarDays, CalendarX
+  MapPin, Sparkles, UserCheck, User, CalendarDays, CalendarX
 } from 'lucide-vue-next'
 
 const router = useRouter()
 const route = useRoute()
 
-// ─── State ───
 const step = ref(0)
 const selectedServiceIds = ref([])
 const selectedStylistId = ref(null)
@@ -355,14 +328,12 @@ const customerPhone = ref('')
 const customerNotes = ref('')
 const activeCategory = ref('All')
 
-// Calendar state
 const calendarMonth = ref(new Date().getMonth())
 const calendarYear = ref(new Date().getFullYear())
 
 const stepLabels = ['Services', 'Stylist', 'Date', 'Details', 'Confirm']
 const dayHeaders = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
-// ─── Pre-select from query ───
 onMounted(() => {
   const svcId = route.query.service
   if (svcId) {
@@ -371,7 +342,6 @@ onMounted(() => {
   }
 })
 
-// ─── Computed ───
 const categories = computed(() => ['All', ...getServiceCategories(store.locationServices)])
 
 const filteredServices = computed(() => {
@@ -385,6 +355,11 @@ const selectedServices = computed(() =>
 
 const totalDuration = computed(() => selectedServices.value.reduce((sum, s) => sum + s.duration, 0))
 const totalPrice = computed(() => selectedServices.value.reduce((sum, s) => sum + s.price, 0))
+
+const serviceCountLabel = computed(() => {
+  const count = selectedServices.value.length
+  return count === 1 ? '1 service' : `${count} services`
+})
 
 const availableStylists = computed(() => {
   const serviceCategories = selectedServices.value.map(s => s.category)
@@ -421,7 +396,6 @@ const canProceed = computed(() => {
   }
 })
 
-// ─── Calendar ───
 const monthLabel = computed(() => {
   return new Date(calendarYear.value, calendarMonth.value).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 })
@@ -435,13 +409,11 @@ const calendarDays = computed(() => {
 
   const cells = []
   for (let i = 0; i < startDow; i++) cells.push({ day: null, dateStr: '', selectable: false, isToday: false })
-
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${calendarYear.value}-${String(calendarMonth.value + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
     const isPast = dateStr < todayStr
     cells.push({ day: d, dateStr, selectable: !isPast, isToday: dateStr === todayStr })
   }
-
   return cells
 })
 
@@ -449,28 +421,20 @@ function prevMonth () {
   if (calendarMonth.value === 0) { calendarMonth.value = 11; calendarYear.value-- }
   else calendarMonth.value--
 }
-
 function nextMonth () {
   if (calendarMonth.value === 11) { calendarMonth.value = 0; calendarYear.value++ }
   else calendarMonth.value++
 }
-
-// ─── Actions ───
-function isServiceSelected (id) {
-  return selectedServiceIds.value.includes(id)
-}
-
+function isServiceSelected (id) { return selectedServiceIds.value.includes(id) }
 function toggleService (service) {
   const idx = selectedServiceIds.value.indexOf(service.id)
   if (idx > -1) selectedServiceIds.value.splice(idx, 1)
   else selectedServiceIds.value.push(service.id)
 }
-
 function handleBack () {
   if (step.value > 0) step.value--
   else router.back()
 }
-
 function confirmBooking () {
   const stylist = store.stylists.find(s => s.id === actualStylistId.value)
   const apt = store.addAppointment({

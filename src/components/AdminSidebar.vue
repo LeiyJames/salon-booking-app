@@ -1,6 +1,5 @@
 <template>
   <aside class="hidden md:flex fixed left-0 top-0 bottom-0 w-64 flex-col bg-dark-800 border-r border-white/5 z-40">
-    <!-- Logo -->
     <div class="p-5 border-b border-white/5">
       <router-link to="/" class="flex items-center gap-3 group">
         <div class="w-10 h-10 rounded-xl gradient-gold flex items-center justify-center">
@@ -13,7 +12,6 @@
       </router-link>
     </div>
 
-    <!-- Location Switcher -->
     <div class="px-4 py-3 border-b border-white/5">
       <select
         v-model="store.currentLocationId"
@@ -25,7 +23,6 @@
       </select>
     </div>
 
-    <!-- Nav Links -->
     <nav class="flex-1 py-3 px-3 space-y-0.5 overflow-y-auto">
       <router-link
         v-for="item in navItems"
@@ -39,7 +36,6 @@
       </router-link>
     </nav>
 
-    <!-- Bottom user area -->
     <div class="p-4 border-t border-white/5">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-full gradient-accent flex items-center justify-center text-white text-xs font-bold">

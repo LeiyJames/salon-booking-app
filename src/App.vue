@@ -1,11 +1,8 @@
 <template>
   <div class="min-h-screen bg-dark-900">
-    <!-- Desktop Sidebar (admin routes only) -->
     <AdminSidebar v-if="isAdminRoute" />
 
-    <!-- Main Content -->
     <div :class="isAdminRoute ? 'md:ml-64' : ''">
-      <!-- Top Header for admin -->
       <AdminHeader v-if="isAdminRoute" />
 
       <router-view v-slot="{ Component }">
@@ -15,10 +12,8 @@
       </router-view>
     </div>
 
-    <!-- Mobile Bottom Nav (public routes) -->
-    <BottomNav v-if="!isAdminRoute" />
+    <BottomNav v-if="showBottomNav" />
 
-    <!-- Toast Notifications -->
     <teleport to="body">
       <div class="fixed top-4 right-4 z-[100] flex flex-col gap-2" style="pointer-events: none;">
         <transition-group name="toast">
@@ -52,6 +47,8 @@ import BottomNav from './components/BottomNav.vue'
 
 const route = useRoute()
 const isAdminRoute = computed(() => route.path.startsWith('/admin'))
+const hideBottomNavRoutes = ['/book', '/booking', '/manage']
+const showBottomNav = computed(() => !isAdminRoute.value && !hideBottomNavRoutes.some(r => route.path.startsWith(r)))
 </script>
 
 <style scoped>

@@ -4,20 +4,14 @@
       <h1 class="font-display text-2xl font-bold text-dark-100">Clients</h1>
       <button class="btn-primary text-sm" @click="showAddModal = true"><UserPlus :size="16" /> Add Client</button>
     </div>
-
-    <!-- Search -->
     <div class="relative mb-5">
       <Search :size="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400" />
       <input v-model="search" type="text" class="input-field pl-10" placeholder="Search clients..." />
     </div>
-
-    <!-- List -->
     <div class="space-y-2">
       <div v-for="client in filteredClients" :key="client.id" class="card p-4 cursor-pointer" @click="selectedClient = client">
         <div class="flex items-center gap-4">
-          <div class="w-11 h-11 rounded-full gradient-accent flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-            {{ getInitials(client.name) }}
-          </div>
+          <div class="w-11 h-11 rounded-full gradient-accent flex items-center justify-center text-white font-bold text-sm flex-shrink-0">{{ getInitials(client.name) }}</div>
           <div class="flex-1 min-w-0">
             <h3 class="font-medium text-dark-100">{{ client.name }}</h3>
             <div class="flex items-center gap-3 text-sm text-dark-400">
@@ -25,14 +19,10 @@
               <span v-if="client.email" class="flex items-center gap-1"><Mail :size="12" /> {{ client.email }}</span>
             </div>
           </div>
-          <div class="text-right flex-shrink-0">
-            <p class="text-xs text-dark-400">{{ clientAppointmentCount(client.id) }} visits</p>
-          </div>
+          <div class="text-right flex-shrink-0"><p class="text-xs text-dark-400">{{ clientAppointmentCount(client.id) }} visits</p></div>
         </div>
       </div>
     </div>
-
-    <!-- Client Detail Modal -->
     <teleport to="body">
       <div v-if="selectedClient" class="overlay-backdrop" @click="selectedClient = null"></div>
       <div v-if="selectedClient" class="modal-content p-6">
@@ -60,8 +50,6 @@
         <p v-else class="text-dark-400 text-sm">No appointment history.</p>
       </div>
     </teleport>
-
-    <!-- Add Client Modal -->
     <teleport to="body">
       <div v-if="showAddModal" class="overlay-backdrop" @click="showAddModal = false"></div>
       <div v-if="showAddModal" class="modal-content p-6">
@@ -70,22 +58,10 @@
           <button @click="showAddModal = false" class="p-2 rounded-lg hover:bg-dark-700 text-dark-400"><X :size="18" /></button>
         </div>
         <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-dark-300 mb-1.5">Name *</label>
-            <input v-model="newClient.name" type="text" class="input-field" placeholder="Full name" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-dark-300 mb-1.5">Email</label>
-            <input v-model="newClient.email" type="email" class="input-field" placeholder="email@example.com" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-dark-300 mb-1.5">Phone</label>
-            <input v-model="newClient.phone" type="tel" class="input-field" placeholder="(555) 000-0000" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-dark-300 mb-1.5">Notes</label>
-            <textarea v-model="newClient.notes" class="input-field min-h-[60px] resize-none" placeholder="Any notes..."></textarea>
-          </div>
+          <div><label class="block text-sm font-medium text-dark-300 mb-1.5">Name *</label><input v-model="newClient.name" type="text" class="input-field" placeholder="Full name" /></div>
+          <div><label class="block text-sm font-medium text-dark-300 mb-1.5">Email</label><input v-model="newClient.email" type="email" class="input-field" placeholder="email@example.com" /></div>
+          <div><label class="block text-sm font-medium text-dark-300 mb-1.5">Phone</label><input v-model="newClient.phone" type="tel" class="input-field" placeholder="(555) 000-0000" /></div>
+          <div><label class="block text-sm font-medium text-dark-300 mb-1.5">Notes</label><textarea v-model="newClient.notes" class="input-field min-h-[60px] resize-none" placeholder="Any notes..."></textarea></div>
         </div>
         <button class="btn-primary w-full mt-5" :disabled="!newClient.name.trim()" @click="addClient">Add Client</button>
       </div>
@@ -102,30 +78,9 @@ const search = ref('')
 const selectedClient = ref(null)
 const showAddModal = ref(false)
 const newClient = reactive({ name: '', email: '', phone: '', notes: '' })
-
-const filteredClients = computed(() => {
-  const q = search.value.toLowerCase().trim()
-  return store.customers.filter(c => !q || c.name.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q))
-})
-
-const clientHistory = computed(() => {
-  if (!selectedClient.value) return []
-  return store.appointments
-    .filter(a => a.customerId === selectedClient.value.id || a.customerName === selectedClient.value.name)
-    .sort((a, b) => b.date.localeCompare(a.date))
-})
-
-function clientAppointmentCount (id) {
-  return store.appointments.filter(a => a.customerId === id && a.status !== 'cancelled').length
-}
-
-function getInitials (name) {
-  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
-}
-
-function addClient () {
-  store.addCustomer({ ...newClient })
-  Object.assign(newClient, { name: '', email: '', phone: '', notes: '' })
-  showAddModal.value = false
-}
+const filteredClients = computed(() => { const q = search.value.toLowerCase().trim(); return store.customers.filter(c => !q || c.name.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q)) })
+const clientHistory = computed(() => { if (!selectedClient.value) return []; return store.appointments.filter(a => a.customerId === selectedClient.value.id || a.customerName === selectedClient.value.name).sort((a, b) => b.date.localeCompare(a.date)) })
+function clientAppointmentCount (id) { return store.appointments.filter(a => a.customerId === id && a.status !== 'cancelled').length }
+function getInitials (name) { return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) }
+function addClient () { store.addCustomer({ ...newClient }); Object.assign(newClient, { name: '', email: '', phone: '', notes: '' }); showAddModal.value = false }
 </script>

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  /* ─── Public / Customer ─── */
   {
     path: '/',
     name: 'Home',
@@ -22,8 +21,6 @@ const routes = [
     name: 'ManageBooking',
     component: () => import('./views/ManageBooking.vue'),
   },
-
-  /* ─── Admin / Staff ─── */
   {
     path: '/admin',
     name: 'AdminDashboard',
