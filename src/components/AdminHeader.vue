@@ -65,7 +65,7 @@ import { store } from '../store'
 import {
   Menu, Bell, X, Scissors,
   LayoutDashboard, CalendarDays, ClipboardList,
-  Users, Sparkles, UserCog, MapPin, Settings
+  Users, Sparkles, UserCog, MapPin, Settings, Package
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -76,6 +76,7 @@ const navItems = [
   { label: 'Calendar', path: '/admin/calendar', icon: CalendarDays },
   { label: 'Appointments', path: '/admin/appointments', icon: ClipboardList },
   { label: 'Clients', path: '/admin/clients', icon: Users },
+  { label: 'Inventory', path: '/admin/inventory', icon: Package },
   { label: 'Services', path: '/admin/services', icon: Sparkles },
   { label: 'Team', path: '/admin/team', icon: UserCog },
   { label: 'Locations', path: '/admin/locations', icon: MapPin },
@@ -87,6 +88,7 @@ const titleMap = {
   '/admin/calendar': 'Calendar',
   '/admin/appointments': 'Appointments',
   '/admin/clients': 'Clients',
+  '/admin/inventory': 'Inventory',
   '/admin/services': 'Services',
   '/admin/team': 'Team',
   '/admin/locations': 'Locations',

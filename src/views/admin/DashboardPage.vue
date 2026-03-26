@@ -29,7 +29,7 @@
       <div v-else class="space-y-2">
         <div v-for="apt in store.todayAppointments" :key="apt.id" class="card p-4">
           <div class="flex items-center gap-4">
-            <div class="text-center flex-shrink-0 w-16">
+            <div class="text-center shrink-0 w-16">
               <p class="text-lg font-bold text-dark-100">{{ formatTime(apt.time) }}</p>
               <p class="text-xs text-dark-500">{{ apt.totalDuration }}m</p>
             </div>
@@ -42,7 +42,7 @@
               <p class="text-sm text-dark-400 truncate">{{ apt.services.map(s => s.name).join(', ') }}</p>
               <p class="text-xs text-dark-500 mt-0.5">with {{ apt.stylistName }}</p>
             </div>
-            <div class="text-right flex-shrink-0">
+            <div class="text-right shrink-0">
               <p class="font-semibold text-gold-400">{{ formatPrice(apt.totalPrice) }}</p>
             </div>
           </div>
@@ -79,9 +79,9 @@ import { CalendarDays, ArrowRight, Plus, UserPlus, Sparkles, Users, DollarSign, 
 const greeting = computed(() => { const h = new Date().getHours(); if (h < 12) return 'morning'; if (h < 17) return 'afternoon'; return 'evening' })
 
 const stats = computed(() => [
-  { label: "Today's Bookings", value: store.todayAppointments.length, icon: CalendarDays, bgClass: 'bg-gold-500/10', iconClass: 'text-gold-400' },
-  { label: 'Upcoming', value: store.upcomingAppointments.length, icon: TrendingUp, bgClass: 'bg-accent-500/10', iconClass: 'text-accent-400' },
-  { label: 'Total Clients', value: store.customers.length, icon: Users, bgClass: 'bg-green-500/10', iconClass: 'text-green-400' },
-  { label: "Today's Revenue", value: formatPrice(store.todayAppointments.filter(a => a.paymentStatus === 'paid').reduce((sum, a) => sum + a.totalPrice, 0)), icon: DollarSign, bgClass: 'bg-amber-500/10', iconClass: 'text-amber-400' },
+  { label: "Today's Revenue", value: formatPrice(store.todayRevenue), icon: DollarSign, bgClass: 'bg-amber-500/10', iconClass: 'text-amber-400' },
+  { label: 'Weekly Revenue', value: formatPrice(store.weeklyRevenue), icon: TrendingUp, bgClass: 'bg-green-500/10', iconClass: 'text-green-400' },
+  { label: 'Monthly Revenue', value: formatPrice(store.monthlyRevenue), icon: DollarSign, bgClass: 'bg-gold-500/10', iconClass: 'text-gold-400' },
+  { label: "Today's Bookings", value: store.todayAppointments.length, icon: CalendarDays, bgClass: 'bg-accent-500/10', iconClass: 'text-accent-400' },
 ])
 </script>

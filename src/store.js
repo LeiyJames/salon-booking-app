@@ -129,6 +129,13 @@ export const store = reactive({
   stylists,
   customers: loadFromStorage('glowup_customers', defaultCustomers),
   appointments: loadFromStorage('glowup_appointments', generateSampleAppointments()),
+  inventory: loadFromStorage('glowup_inventory', [
+    { id: 'inv-1', name: 'Premium Hair Wax', category: 'Styling', quantity: 24, price: 450, minStock: 5 },
+    { id: 'inv-2', name: 'Moisturizing Shampoo', category: 'Hair Care', quantity: 15, price: 650, minStock: 10 },
+    { id: 'inv-3', name: 'Argan Oil Serum', category: 'Treatment', quantity: 8, price: 850, minStock: 5 },
+    { id: 'inv-4', name: 'Matte Clay', category: 'Styling', quantity: 12, price: 400, minStock: 5 },
+    { id: 'inv-5', name: 'Scalp Scrub', category: 'Hair Care', quantity: 4, price: 550, minStock: 8 },
+  ]),
   notifications: loadFromStorage('glowup_notifications', []),
 
   // UI state
@@ -161,6 +168,28 @@ export const store = reactive({
     return this.appointments
       .filter(a => a.date >= t && a.status !== 'cancelled')
       .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))
+  },
+
+  get todayRevenue () {
+    const t = today()
+    return this.appointments
+      .filter(a => a.date === t && a.paymentStatus === 'paid' && a.status !== 'cancelled')
+      .reduce((sum, a) => sum + a.totalPrice, 0)
+  },
+
+  get weeklyRevenue () {
+    const now = new Date()
+    const firstDay = new Date(now.setDate(now.getDate() - now.getDay())).toISOString().slice(0, 10)
+    return this.appointments
+      .filter(a => a.date >= firstDay && a.paymentStatus === 'paid' && a.status !== 'cancelled')
+      .reduce((sum, a) => sum + a.totalPrice, 0)
+  },
+
+  get monthlyRevenue () {
+    const firstDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().slice(0, 10)
+    return this.appointments
+      .filter(a => a.date >= firstDay && a.paymentStatus === 'paid' && a.status !== 'cancelled')
+      .reduce((sum, a) => sum + a.totalPrice, 0)
   },
 
   // ─── Actions ───
@@ -217,6 +246,33 @@ export const store = reactive({
   deleteService (id) {
     const idx = this.services.findIndex(s => s.id === id)
     if (idx > -1) this.services.splice(idx, 1)
+  },
+
+  // ─── Inventory Actions ───
+  addInventoryItem (item) {
+    const newItem = { ...item, id: 'inv-' + genId() }
+    this.inventory.push(newItem)
+    this._persist()
+    this.showToast('Item added to inventory', 'success')
+    return newItem
+  },
+
+  updateInventoryItem (id, updates) {
+    const idx = this.inventory.findIndex(i => i.id === id)
+    if (idx > -1) {
+      Object.assign(this.inventory[idx], updates)
+      this._persist()
+      this.showToast('Inventory updated', 'success')
+    }
+  },
+
+  deleteInventoryItem (id) {
+    const idx = this.inventory.findIndex(i => i.id === id)
+    if (idx > -1) {
+      this.inventory.splice(idx, 1)
+      this._persist()
+      this.showToast('Item removed from inventory', 'warning')
+    }
   },
 
   // ─── Availability / Slot generation ───
@@ -302,6 +358,7 @@ export const store = reactive({
   _persist () {
     saveToStorage('glowup_appointments', this.appointments)
     saveToStorage('glowup_customers', this.customers)
+    saveToStorage('glowup_inventory', this.inventory)
   },
 })
 
