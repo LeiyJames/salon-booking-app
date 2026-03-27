@@ -33,16 +33,16 @@ const locations = [
 
 // ─── Services ───
 const services = [
-  { id: 'svc-1', name: 'Classic Haircut', duration: 30, price: 350, category: 'Haircut', locationIds: ['loc-1', 'loc-2'] },
-  { id: 'svc-2', name: 'Fade & Taper', duration: 45, price: 450, category: 'Haircut', locationIds: ['loc-1', 'loc-2'] },
-  { id: 'svc-3', name: 'Beard Trim & Shape', duration: 20, price: 200, category: 'Grooming', locationIds: ['loc-1', 'loc-2'] },
-  { id: 'svc-4', name: 'Hot Towel Shave', duration: 30, price: 400, category: 'Grooming', locationIds: ['loc-1'] },
-  { id: 'svc-5', name: 'Hair Color', duration: 90, price: 1200, category: 'Color', locationIds: ['loc-1', 'loc-2'] },
-  { id: 'svc-6', name: 'Highlights', duration: 120, price: 1800, category: 'Color', locationIds: ['loc-1'] },
-  { id: 'svc-7', name: 'Keratin Treatment', duration: 120, price: 2500, category: 'Treatment', locationIds: ['loc-1', 'loc-2'] },
-  { id: 'svc-8', name: 'Scalp Treatment', duration: 45, price: 600, category: 'Treatment', locationIds: ['loc-1', 'loc-2'] },
-  { id: 'svc-9', name: 'Kids Haircut', duration: 20, price: 250, category: 'Haircut', locationIds: ['loc-1', 'loc-2'] },
-  { id: 'svc-10', name: 'Shampoo & Blowdry', duration: 30, price: 300, category: 'Styling', locationIds: ['loc-1', 'loc-2'] },
+  { id: 'svc-3', name: 'Beard Trim & Shape', duration: 20, price: 200, category: 'Grooming', locationIds: ['loc-1', 'loc-2'], image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=80' },
+  { id: 'svc-4', name: 'Hot Towel Shave', duration: 30, price: 400, category: 'Grooming', locationIds: ['loc-1'], image: 'https://images.unsplash.com/photo-1599351431247-f50935817dea?w=800&q=80' },
+  { id: 'svc-5', name: 'Hair Color', duration: 90, price: 1200, category: 'Color', locationIds: ['loc-1', 'loc-2'], image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&q=80' },
+  { id: 'svc-6', name: 'Highlights', duration: 120, price: 1800, category: 'Color', locationIds: ['loc-1'], image: 'https://images.unsplash.com/photo-1620331311520-246422fd82f9?w=800&q=80' },
+  { id: 'svc-7', name: 'Keratin Treatment', duration: 120, price: 2500, category: 'Treatment', locationIds: ['loc-1', 'loc-2'], image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800&q=80' },
+  { id: 'svc-8', name: 'Scalp Treatment', duration: 45, price: 600, category: 'Treatment', locationIds: ['loc-1', 'loc-2'], image: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=800&q=80' },
+  { id: 'svc-10', name: 'Shampoo & Blowdry', duration: 30, price: 300, category: 'Styling', locationIds: ['loc-1', 'loc-2'], image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?w=800&q=80' },
+  { id: 'svc-11', name: 'Burst Fade pa rin to ya?', duration: 45, price: 500, category: 'Haircut', locationIds: ['loc-1', 'loc-2'], image: '/image/burstfade.png' },
+  { id: 'svc-12', name: 'Mullet Check', duration: 40, price: 400, category: 'Haircut', locationIds: ['loc-1', 'loc-2'], image: '/image/mulet.png' },
+  { id: 'svc-13', name: 'Babayad naba ako?', duration: 30, price: 350, category: 'Haircut', locationIds: ['loc-1', 'loc-2'], image: '/image/pinya2.png' },
 ]
 
 // ─── Stylists ───

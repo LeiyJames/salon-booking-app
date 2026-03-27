@@ -51,28 +51,60 @@
           </button>
         </div>
 
-        <div class="space-y-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div
             v-for="service in filteredServices"
             :key="service.id"
-            class="card p-4 cursor-pointer transition-all"
-            :class="isServiceSelected(service.id) ? 'border-gold-500/40 bg-gold-500/5' : ''"
+            class="group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 border-2"
+            :class="isServiceSelected(service.id) 
+              ? 'border-gold-500 bg-gold-500/5 shadow-[0_10px_30px_-10px_rgba(201,164,86,0.3)]' 
+              : 'border-dark-700 bg-dark-800 hover:border-dark-500 hover:shadow-xl hover:-translate-y-1'"
             @click="toggleService(service)"
           >
-            <div class="flex items-center justify-between">
-              <div class="flex-1">
-                <h3 class="font-medium text-dark-100">{{ service.name }}</h3>
-                <div class="flex items-center gap-3 mt-1 text-sm text-dark-400">
-                  <span class="flex items-center gap-1"><Clock :size="14" /> {{ service.duration }} min</span>
-                  <span class="font-semibold text-gold-400">{{ formatPrice(service.price) }}</span>
+            <!-- Service Image Container -->
+            <div class="relative h-44 overflow-hidden">
+              <img 
+                :src="service.image" 
+                :alt="service.name" 
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <!-- Dark Overlay Gradient -->
+              <div class="absolute inset-0 bg-linear-to-t from-dark-900 via-dark-900/20 to-transparent"></div>
+              
+              <!-- Category Badge -->
+              <div class="absolute top-3 left-3">
+                <span class="px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase bg-black/40 backdrop-blur-md border border-white/10 text-gold-400">
+                  {{ service.category }}
+                </span>
+              </div>
+
+              <!-- Selection Indicator -->
+              <div 
+                class="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 border-2"
+                :class="isServiceSelected(service.id) 
+                  ? 'bg-gold-500 border-gold-500 scale-110 shadow-[0_0_15px_rgba(201,164,86,0.5)]' 
+                  : 'bg-black/20 border-white/30 backdrop-blur-md'"
+              >
+                <Check v-if="isServiceSelected(service.id)" :size="18" class="text-dark-900 stroke-[3px]" />
+              </div>
+
+              <!-- Bottom Info (Inside Image for more premium look) -->
+              <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                <div class="flex items-center gap-1.5 text-xs font-medium text-dark-100 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-md border border-white/5">
+                  <Clock :size="12" class="text-gold-400" />
+                  {{ service.duration }} min
                 </div>
               </div>
-              <div
-                class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all"
-                :class="isServiceSelected(service.id) ? 'border-gold-500 bg-gold-500' : 'border-dark-500'"
-              >
-                <Check v-if="isServiceSelected(service.id)" :size="14" class="text-dark-900" />
-              </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-4">
+              <h3 class="font-bold text-dark-100 group-hover:text-gold-400 transition-colors leading-tight mb-1">
+                {{ service.name }}
+              </h3>
+              <p class="text-2xl font-black text-gold-400 leading-none">
+                {{ formatPrice(service.price) }}
+              </p>
             </div>
           </div>
         </div>
